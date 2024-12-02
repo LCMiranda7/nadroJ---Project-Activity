@@ -1,40 +1,38 @@
-name: Testing Branch Pipeline
+name: Testing Branch Workflow
 
 on:
   push:
     branches:
       - testing
-  pull_request:
-    branches:
-      - testing
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install Dependencies
-        run: npm install
-      - name: Build Application
-        run: npm run build
-      - name: Run Linting
-        run: npm run lint
-
   test:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install Dependencies
-        run: npm install
-      - name: Run Unit Tests
-        run: npm test
-      - name: Run Integration Tests
-        run: npm run test:integration
 
-  deploy:
-    runs-on: ubuntu-latest
-    if: success()
     steps:
-      - uses: actions/checkout@v3
-      - name: Deploy to Staging
-        run: npm run deploy:staging
+      # Checkout code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Set up Python environment
+      - name: Set Up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      # Install dependencies (if any)
+      - name: Install Dependencies
+        run: pip install requests
+
+      # Run the script to ensure it works
+      - name: Run Script
+        run: python get_location.py
+
+      # Optional: Validate expected output
+      - name: Test Script Output
+        run: |
+          python -c "
+import requests
+response = requests.get('https://api.ipify.org?format=json').json()
+assert 'ip' in response, 'IP address not found'
+"

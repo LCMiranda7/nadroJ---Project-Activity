@@ -1,4 +1,4 @@
-name: Main Branch Pipeline
+name: Main Branch Workflow
 
 on:
   push:
@@ -9,30 +9,28 @@ on:
       - main
 
 jobs:
-  build:
+  test-and-deploy:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install Dependencies
-        run: npm install
-      - name: Build Application
-        run: npm run build
-      - name: Run Linting
-        run: npm run lint
 
-  test:
-    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Install Dependencies
-        run: npm install
-      - name: Run Final Tests
-        run: npm test
+      # Checkout code
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-  deploy:
-    runs-on: ubuntu-latest
-    if: success()
-    steps:
-      - uses: actions/checkout@v3
-      - name: Deploy to Production
-        run: npm run deploy:prod
+      # Set up Python environment
+      - name: Set Up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      # Install dependencies
+      - name: Install Dependencies
+        run: pip install requests
+
+      # Run the script for final validation
+      - name: Validate Script
+        run: python get_location.py
+
+      # Deploy (simulated here as a success message)
+      - name: Deploy Script
+        run: echo "Code validated and deployed successfully."
