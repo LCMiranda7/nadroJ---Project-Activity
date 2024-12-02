@@ -29,7 +29,7 @@ jobs:
 
       # Run the script for final validation
       - name: Validate Script
-        run: python get_location.py
+        run: python test.py
 
       # Deploy (simulated here as a success message)
       - name: Deploy Script

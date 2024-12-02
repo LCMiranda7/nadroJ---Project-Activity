@@ -26,7 +26,7 @@ jobs:
 
       # Run the script to ensure it works
       - name: Run Script
-        run: python get_location.py
+        run: python test.py
 
       # Optional: Validate expected output
       - name: Test Script Output
